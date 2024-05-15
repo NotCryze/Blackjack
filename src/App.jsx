@@ -1,4 +1,4 @@
-import { Button, MantineProvider } from '@mantine/core';
+import { Box, Button, MantineProvider } from '@mantine/core';
 import '@mantine/core/styles.css';
 import Blackjack from './classes/Blackjack';
 
@@ -8,19 +8,30 @@ function App() {
 
   const addPlayer = () => Blackjackk.AddPlayer()
   const removePlayer = () => Blackjackk.RemovePlayer()
-  const showPlayers = () => Blackjackk.ShowPlayers()
-  const resetDeck = () => Blackjackk.ResetDeck()
-  const showDeck = () => Blackjackk.ShowDeck()
-  const shuffleDeck = () => Blackjackk.ShuffleDeck()
+
+  const start = () => Blackjackk.Start()
+
+  const hit = () => Blackjackk.Hit()
+  const stand = () => Blackjackk.Stand()
 
   return (
     <MantineProvider defaultColorScheme='dark'>
-      <Button onClick={showPlayers}>Log Players</Button>
-      <Button onClick={addPlayer}>Add Player</Button>
-      <Button onClick={removePlayer}>Remove Player</Button>
-      <Button onClick={resetDeck}>Reset / Make Deck</Button>
-      <Button onClick={showDeck}>Show Deck</Button>
-      <Button onClick={shuffleDeck}>Shuffle Deck</Button>
+      <Box mb={5}>
+        <Button onClick={addPlayer}>Add Player</Button>
+        <Button onClick={removePlayer}>Remove Player</Button>
+      </Box>
+
+      <Box mb={25}>
+        <Button onClick={start}>Start</Button>
+      </Box>
+
+      <Box>
+        Player {Blackjackk.currentTurn} turn
+        <Box >
+          <Button onClick={hit}>Hit</Button>
+          <Button onClick={stand}>Stand</Button>
+        </Box>
+      </Box>
     </MantineProvider>
   )
 }

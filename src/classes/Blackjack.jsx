@@ -12,6 +12,7 @@ class Blackjack {
     }
     deck = this.ResetDeck()
     active = false
+    currentTurn = 0
 
     //#region Players
 
@@ -31,8 +32,6 @@ class Blackjack {
             this.players.pop()
         }
     }
-
-    ShowPlayers() { console.log(this.players) }
 
     //#endregion
 
@@ -67,6 +66,7 @@ class Blackjack {
     //#endregion
 
     //#region Draw Cards
+
     PlayerDrawCard(playerIndex) {
         let drawnCard = this.deck.pop()
         this.players[playerIndex].hand.push(drawnCard)
@@ -77,6 +77,84 @@ class Blackjack {
         let drawnCard = this.deck.pop()
         this.dealer.hand.push(drawnCard)
         this.dealer.score += drawnCard.value
+    }
+
+    //#endregion
+
+    //#region Checks
+
+    CheckScores() {
+
+    }
+
+    //#endregion
+
+    //#region Hit & Stand
+
+    Hit() {
+        this.PlayerDrawCard(this.currentTurn - 1)
+        console.log(this.players[this.currentTurn - 1])
+    }
+
+    Stand() {
+        this.NextTurn()
+    }
+
+    //#endregion
+
+    //#region Game
+    Start() {
+        this.active = true
+
+        //#region Clear all hands and scores
+
+        this.players.forEach(player => {
+            player.standing = false
+            player.score = 0
+            player.hand = []
+        })
+        this.dealer.hand = []
+        this.dealer.score = 0
+
+        //#endregion
+
+        //#region Deck shuffle
+        this.ResetDeck()
+        this.ShuffleDeck()
+        //#endregion
+
+        //#region Draw first card
+        this.DealerDrawCard()
+        this.players.forEach((player, index) => {
+            this.PlayerDrawCard(index)
+        })
+        //#endregion
+
+        //#region Draw second card
+        this.DealerDrawCard()
+        this.players.forEach((player, index) => {
+            this.PlayerDrawCard(index)
+        })
+        //#endregion
+
+        //#region Console log player and Dealer hand
+
+        this.players.forEach((player) => {
+            console.log(player.name)
+            console.log(player.hand + " score: " + player.score)
+        })
+
+        console.log("Dealer")
+        console.log(this.dealer.hand + " score: " + this.dealer.score)
+
+        //#endregion
+
+        this.NextTurn()
+    }
+
+    NextTurn() {
+        this.currentTurn += 1
+        console.log("Player " + this.currentTurn + " turn")
     }
     //#endregion
 }
