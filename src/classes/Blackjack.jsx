@@ -5,35 +5,13 @@ const suits = ["H", "S", "C", "D"]
 const ranks = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "T", "J", "Q", "K"]
 
 class Blackjack {
-    players = [new Player("Player 1")]
+    player = new Player("Player")
     dealer = {
         hand: [],
         score: 0
     }
     deck = this.ResetDeck()
     active = false
-    currentTurn = 0
-
-    //#region Players
-
-    AddPlayer() {
-        if (this.players.length <= 3) {
-            let newPlayer = new Player(`Player ${this.players.length + 1}`)
-            this.players.push(newPlayer)
-            console.log(`Added ${newPlayer.name}`)
-        }
-        else {
-            console.log("Already have max amount of players")
-        }
-    }
-
-    RemovePlayer() {
-        if (this.players.length >= 2) {
-            this.players.pop()
-        }
-    }
-
-    //#endregion
 
     //#region Deck
 
@@ -41,7 +19,7 @@ class Blackjack {
         let deck = []
         for (let i = 0; i < suits.length; i++) {
             for (let j = 0; j < ranks.length; j++) {
-                deck.push(new Card(suits[i], ranks[j], j > 8 ? 10 : j + 1))
+                deck.push(new Card(suits[i], ranks[j], j > 8 ? 10 : j == 0 ? 11 : j + 1))
             }
         }
         this.deck = deck
@@ -67,10 +45,10 @@ class Blackjack {
 
     //#region Draw Cards
 
-    PlayerDrawCard(playerIndex) {
+    PlayerDrawCard() {
         let drawnCard = this.deck.pop()
-        this.players[playerIndex].hand.push(drawnCard)
-        this.players[playerIndex].score += drawnCard.value
+        this.player.hand.push(drawnCard)
+        this.player.score += drawnCard.value
     }
 
     DealerDrawCard() {
@@ -91,28 +69,30 @@ class Blackjack {
 
     //#region Hit & Stand
 
-    Hit() {
-        this.PlayerDrawCard(this.currentTurn - 1)
-        console.log(this.players[this.currentTurn - 1])
+    Hit(setPlayer) {
+        this.PlayerDrawCard()
+        console.log("Hit")
+        setPlayer(this.player)
     }
 
-    Stand() {
-        this.NextTurn()
+    Stand(setPlayer) {
+        this.player.standing = true
+        console.log("Stand")
+        setPlayer(this.player)
     }
 
     //#endregion
 
     //#region Game
-    Start() {
+    Start(setPlayer) {
         this.active = true
 
         //#region Clear all hands and scores
 
-        this.players.forEach(player => {
-            player.standing = false
-            player.score = 0
-            player.hand = []
-        })
+        this.player.standing = false
+        this.player.score = 0
+        this.player.hand = []
+
         this.dealer.hand = []
         this.dealer.score = 0
 
@@ -125,37 +105,27 @@ class Blackjack {
 
         //#region Draw first card
         this.DealerDrawCard()
-        this.players.forEach((player, index) => {
-            this.PlayerDrawCard(index)
-        })
+        this.PlayerDrawCard()
         //#endregion
 
         //#region Draw second card
         this.DealerDrawCard()
-        this.players.forEach((player, index) => {
-            this.PlayerDrawCard(index)
-        })
+        this.PlayerDrawCard()
+
+        setPlayer(this.player)
         //#endregion
 
         //#region Console log player and Dealer hand
 
-        this.players.forEach((player) => {
-            console.log(player.name)
-            console.log(player.hand + " score: " + player.score)
-        })
+        console.log(this.player.name)
+        console.log(this.player.hand + " score: " + this.player.score)
 
         console.log("Dealer")
         console.log(this.dealer.hand + " score: " + this.dealer.score)
 
         //#endregion
-
-        this.NextTurn()
     }
 
-    NextTurn() {
-        this.currentTurn += 1
-        console.log("Player " + this.currentTurn + " turn")
-    }
     //#endregion
 }
 

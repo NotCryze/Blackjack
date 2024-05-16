@@ -1,37 +1,36 @@
-import { Box, Button, MantineProvider } from '@mantine/core';
+import { Box, Button, Center, Grid, MantineProvider, Text } from '@mantine/core';
 import '@mantine/core/styles.css';
 import Blackjack from './classes/Blackjack';
+import Player from './components/Player'
+
+import { useState } from 'react';
 
 function App() {
 
-  const Blackjackk = new Blackjack()
+  const [BJ, setBJ] = useState(new Blackjack())
+  const [player, setPlayer] = useState(BJ.player)
 
-  const addPlayer = () => Blackjackk.AddPlayer()
-  const removePlayer = () => Blackjackk.RemovePlayer()
+  const start = () => BJ.Start(setPlayer)
 
-  const start = () => Blackjackk.Start()
-
-  const hit = () => Blackjackk.Hit()
-  const stand = () => Blackjackk.Stand()
+  const hit = () => BJ.Hit(setPlayer)
+  const stand = () => BJ.Stand(setPlayer)
 
   return (
     <MantineProvider defaultColorScheme='dark'>
-      <Box mb={5}>
-        <Button onClick={addPlayer}>Add Player</Button>
-        <Button onClick={removePlayer}>Remove Player</Button>
-      </Box>
+      <Center h={"100vh"}>
+        <Box>
+          <Box mb={25}>
+            <Button onClick={start}>Start</Button>
+          </Box>
 
-      <Box mb={25}>
-        <Button onClick={start}>Start</Button>
-      </Box>
+          <Box>
+            <Center>
+              <Player player={player} hit={hit} stand={stand} />
+            </Center>
 
-      <Box>
-        Player {Blackjackk.currentTurn} turn
-        <Box >
-          <Button onClick={hit}>Hit</Button>
-          <Button onClick={stand}>Stand</Button>
+          </Box>
         </Box>
-      </Box>
+      </Center>
     </MantineProvider>
   )
 }
