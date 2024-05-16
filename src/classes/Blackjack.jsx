@@ -98,7 +98,7 @@ class Blackjack {
     //#endregion
 
     //#region Game
-    Start(setPlayerHand, setPlayerScore) {
+    Start(setPlayerHand, setDealerHand) {
         this.active = true
 
         //#region Deck shuffle
@@ -126,7 +126,7 @@ class Blackjack {
         //#endregion
 
         setPlayerHand(this.playerHand.slice())
-        setPlayerScore(this.playerScore)
+        setDealerHand(this.dealerHand.slice())
     }
 
     //#endregion
